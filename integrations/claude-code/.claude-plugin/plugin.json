@@ -1,0 +1,10 @@
+{
+  "name": "onelamp",
+  "version": "0.1.0",
+  "description": "Your portable, self-curating context layer for Claude Code. Pulls your OneLamp context at session start and saves durable learnings at stop — across any AI tool, any model.",
+  "author": {
+    "name": "Saho Labs"
+  },
+  "homepage": "https://onelamp.ai",
+  "keywords": ["mcp", "memory", "context", "onelamp"]
+}

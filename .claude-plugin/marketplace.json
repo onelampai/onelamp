@@ -1,0 +1,17 @@
+{
+  "name": "onelamp",
+  "owner": {
+    "name": "Saho Labs"
+  },
+  "metadata": {
+    "description": "OneLamp — self-curating context for your AI tools. Teach one, they all learn.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "onelamp",
+      "source": "./integrations/claude-code",
+      "description": "Connect Claude Code to your OneLamp context: auto-load context at session start, auto-save durable learnings at stop."
+    }
+  ]
+}

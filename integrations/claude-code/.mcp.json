@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "onelamp": {
+      "type": "http",
+      "url": "https://api.onelamp.ai/mcp"
+    }
+  }
+}

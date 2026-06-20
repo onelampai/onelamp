@@ -1,0 +1,39 @@
+# OneLamp for OpenAI Codex.
+#
+# install.sh appends this verbatim to ~/.codex/config.toml. It does two things:
+#   1. Registers OneLamp as a native remote (streamable-HTTP) MCP server. Codex
+#      speaks HTTP MCP directly and runs the OAuth flow itself — no `mcp-remote`
+#      bridge, no npx. The first task that touches the server opens a browser to
+#      sign in to OneLamp; Codex caches the token afterward.
+#   2. Wires SessionStart/Stop lifecycle hooks so context auto-loads at the start
+#      of a session and durable learnings get saved before it ends — the same
+#      mechanism as the Claude Code plugin, not just an AGENTS.md nudge.
+
+# --- MCP server (native remote HTTP + OAuth) ------------------------------------
+[mcp_servers.onelamp]
+url = "https://api.onelamp.ai/mcp"
+# Headroom for the first-run interactive OAuth browser sign-in (default is 10s).
+startup_timeout_sec = 60
+# No bearer_token_env_var: Codex's OAuth client obtains and refreshes the token
+# from the endpoint's discovery metadata (RFC 8414/9728 + dynamic registration).
+
+# --- Lifecycle hooks (auto load / save) -----------------------------------------
+# Paths resolve at hook-exec time via the shell, honoring CODEX_HOME and falling
+# back to ~/.codex — wherever install.sh placed the scripts. Both hooks fail open
+# (always exit 0 on their own errors) so they can never block Codex.
+[[hooks.SessionStart]]
+matcher = "startup|resume|clear|compact"
+
+[[hooks.SessionStart.hooks]]
+type = "command"
+command = '"${CODEX_HOME:-$HOME/.codex}/onelamp/session-start.sh"'
+timeout = 10
+statusMessage = "Loading OneLamp context"
+
+[[hooks.Stop]]
+
+[[hooks.Stop.hooks]]
+type = "command"
+command = '"${CODEX_HOME:-$HOME/.codex}/onelamp/stop.sh"'
+timeout = 10
+statusMessage = "Saving durable context to OneLamp"
